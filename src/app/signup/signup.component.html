@@ -1,0 +1,49 @@
+<div class="container" style="margin-top:40px; margin-bottom: 40px; min-height: 400px;">
+ <div class="row">
+     <div class="col-md-3">
+
+     </div>
+  <div class="col-md-6">
+    <form #signupForm="ngForm" (ngSubmit)="postSignup(signupForm)">
+        <div *ngFor="let i of this.error1">
+        <div  class="alert alert-danger" role="alert">
+            {{i}}
+          </div>
+        </div>
+        <h1>Register</h1>
+        
+        <div class="form-outline mb-4">
+          <input type="email" name="email" style="border-bottom: 1px black solid;" #email="ngModel" [(ngModel)]="signupService.selectSignup.email" class="form-control" />
+          <label class="form-label" for="form2Example1">Email address</label>
+        </div>
+      
+        
+        <div class="form-outline mb-4">
+          <input type="password" name="pass" #pass="ngModel" style="border-bottom: 1px black solid;" [(ngModel)]="signupService.selectSignup.pass" class="form-control" />
+          <label class="form-label" for="form2Example2">Password</label>
+        </div>
+      <div style="padding: 10px;">  &nbsp;&nbsp; Admin: <div class="form-check form-check-inline" >
+        
+            <input class="form-check-input" type="radio" value="yes" name="isAdmin" #isAdmin="ngModel" [(ngModel)]="signupService.selectSignup.isAdmin"/>
+            <label class="form-check-label" for="flexRadioDefault1"> Yes </label>&nbsp;&nbsp;&nbsp;
+             
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" value="no" name="isAdmin" #isAdmin="ngModel" [(ngModel)]="signupService.selectSignup.isAdmin"/>
+            <label class="form-check-label" for="flexRadioDefault1"> No </label>
+        </div> 
+      </div>
+       
+      
+        <!-- Submit button -->
+        <button type="submit" class="btn btn-primary btn-block mb-4">Register</button>
+      
+        <!-- Register buttons -->
+        <div class="text-center">
+          <p>Have an account ? <a routerLink="/login">Login</a></p>
+  
+        </div>
+      </form>
+  </div>
+ </div>
+</div>

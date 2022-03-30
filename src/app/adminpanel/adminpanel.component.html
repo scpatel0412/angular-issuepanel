@@ -1,0 +1,181 @@
+<div class="container-fluid" style="padding: 50px; min-height: 500px;">
+    <div class="row">
+        <div class="col-md-9">
+            <p>Welcome {{username}}</p> 
+
+        </div>
+        <div class="col-md-3">
+          <button type="button" class="btn btn-primary" data-mdb-toggle="modal" data-mdb-target="#exampleModal">
+            Form
+          </button>
+          
+          
+          <!-- Modal -->
+          <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Issue Form</h5>
+                  
+                  <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                </div>
+                
+                <div class="modal-body">
+                  <p [style.display]="this.adminpanelService.selectAdmin._id ? 'none':''" style="color:red" >Please click on edit button to update data</p>
+                  <form #f="ngForm" (ngSubmit)="onUpdateIssue(f)">
+                    <div class="form-outline mb-4">
+                      <input type="hidden" name="_id" #_id="ngModel" [(ngModel)]="this.adminpanelService.selectAdmin._id" class="form-control" style="border-bottom: 1px solid black ;"  />
+                    
+                    </div>
+                    
+                    <div class="form-outline mb-4">
+                      <input type="text" name="title" #title="ngModel" [(ngModel)]="this.adminpanelService.selectAdmin.title" class="form-control" style="border-bottom: 1px solid black ;" />
+                      <label class="form-label" for="form4Example2">Title</label>
+                    </div>
+                    <div class="form-outline mb-4">
+                      <textarea class="form-control" name="description" #description="ngModel" [(ngModel)]="this.adminpanelService.selectAdmin.description" rows="4" style="border-bottom: 1px solid black ;"></textarea>
+                      <label class="form-label" for="form4Example3">Description</label>
+                    </div>
+                    <select class="form-select" name="type" #type="ngModel" [(ngModel)]="this.adminpanelService.selectAdmin.type" aria-label="Default select example" style="margin-bottom: 20px;">
+                      <option value="" selected disabled>Select Status</option>
+                      <option value="Bug">Bug</option>
+                      <option value="Discussion">Discussion</option>
+                      <option value="Review">Review</option>
+                    </select>
+                    <div class="form-outline mb-4">
+                        <input type="file" class="form-control" (input)="images1($event)" accept="image/*" style="border-bottom: 1px solid black ;" />
+                       
+                      </div>
+          
+                    <button [style.display]="this.adminpanelService.selectAdmin._id ? '':'none'" type="submit" class="btn btn-primary btn-block mb-4">Send</button>
+                  </form>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="row">
+        <div [class]="this.toggle === 'false' ?'col-md-12':'col-md-6'" >
+          <h1>Issues</h1>
+            <table class="table align-middle mb-0 bg-white" >
+                <thead class="bg-light">
+                  <tr>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>#</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                    <th>View</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let i of this.adminpanelService.AllIssueData;">
+                    <td>
+                      <div class="d-flex align-items-center">
+                        <a href="http://localhost:8000/{{i['image'] | slice:8:i['image']['length']}}">
+                        <img
+                            src="http://localhost:8000/{{i['image'] | slice:8:i['image']['length']}}"
+                            alt=""
+                            style="width: 45px; height: 45px"
+                            class="rounded-circle"  
+                            />
+                          </a>
+                        <div class="ms-3">
+                          <p class="fw-bold mb-1">{{i['title']}}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <p class="fw-normal mb-1">{{i['description']}}</p>
+                      
+                    </td>
+                    <td>
+                      
+                      <span class="badge rounded-pill d-inline" [style.background]="(i['type'] ==='Bug') ? 'blue':(i['type'] === 'Discussion') ? 'grey':'red'"  >{{i['type']}}</span>
+                    </td>
+                    <td>{{i['_id']}}</td>
+                    <td>
+                      <button type="button" (click)="onPut(i)" class="btn btn-link btn-sm btn-rounded" >
+                        Edit
+                      </button>
+                    </td>
+                    <td>
+                      <button type="button" (click)="onDeleteIssue(i['_id'])" class="btn btn-link btn-sm btn-rounded">
+                        Delete
+                      </button>
+                    </td>
+                    <td>
+                      <!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" (click)="onGetSingleIssue(i['_id'])" data-mdb-toggle="modal" data-mdb-target="#exampleModal1">
+  <i class="fa-solid fa-eye"></i>
+</button>
+
+
+<div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" *ngIf="data4">
+        <h5 class="modal-title" id="exampleModalLabel">{{data4['_id']}}</h5>
+        <button type="button" *ngIf="data4" class="badge rounded-pill d-inline" [style.background]="(data4['type'] ==='Bug') ? 'blue':(data4['type'] === 'Discussion') ? 'grey':'red'"   aria-label="Close">{{data4['type']}}</button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="data4">
+          <a href="http://localhost:8000/{{i['image'] | slice:8:i['image']['length']}}">
+            <img
+                src="http://localhost:8000/{{i['image'] | slice:8:i['image']['length']}}"
+                alt=""
+                height="200px"
+                width="200px"
+                />
+              </a>
+        </div>
+        <div *ngIf="data4">
+          Title:<strong>{{data4['title']}}</strong>
+        </div>
+        <div *ngIf="data4">
+          Description:<strong>{{data4['description']}}</strong>
+        </div>
+        <div *ngIf="data4">
+          Issue posted date:<strong>{{data4['createdAt'] | date:"medium"}}</strong>
+        </div>
+      </div>
+    
+    </div>
+  </div>
+</div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table> 
+          </div>
+       
+    </div>
+      <div class="row" style="padding-top:40px">
+        <div class="col-md-12" id="#table1">
+          <h1>Users</h1>
+        <table class="table">
+          <thead class="table-light">
+            <th>#</th>
+            <th>Email</th>
+            <th>Admin</th>
+            <th>Creation time</th>
+            <th>Delete</th>
+          </thead>
+          <tbody>
+            <tr *ngFor="let i  of this.adminpanelService.AllUserData">
+              <td>{{i['_id']}}</td>
+              <td>{{i['email']}}</td>
+              <td>{{i['isAdmin']}}</td>
+              <td>{{i['createdAt'] | date:"medium"}}</td>
+              <td><button type="button" (click)="onDeleteUser(i['_id'])" class="btn btn-link btn-sm btn-rounded">
+                Delete
+              </button></td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+</div>
